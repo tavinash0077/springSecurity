@@ -1,8 +1,11 @@
 package com.example.securitydemo;
 
+import com.example.securitydemo.jwt.AuthEntryPointJwt;
+import com.example.securitydemo.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,11 +24,17 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SpringSecurity {
 
     @Autowired
     DataSource dataSource;
 
+    @Autowired
+    private AuthEntryPointJwt authEntryPointJwt;
+
+    @Bean
+    public AuthTokenFilter auth
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests((requests) -> requests.requestMatchers("/h2-console/**").permitAll()
